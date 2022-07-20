@@ -1,4 +1,4 @@
-package ru.yandex.practicum;
+package ru.yandex.practicum.model;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
@@ -15,7 +15,7 @@ public class User {
     }
 
     public static User getRandomUser() {
-        String email = RandomStringUtils.randomAlphabetic(10);
+        String email = RandomStringUtils.randomAlphabetic(10)+"@yandex.ru";
         String password = RandomStringUtils.randomAlphabetic(10);
         String name = RandomStringUtils.randomAlphabetic(10);
         return new User(email, password, name);
@@ -45,6 +45,15 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                '}';
     }
 }
 
