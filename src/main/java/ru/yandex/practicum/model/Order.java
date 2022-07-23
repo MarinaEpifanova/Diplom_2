@@ -3,7 +3,6 @@ package ru.yandex.practicum.model;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class Order {
 
     public List<Ingredient> ingredients = new ArrayList<>();
@@ -32,7 +31,7 @@ public class Order {
 
     public List<String> getIngredientsIds() {
         ArrayList<String> result = new ArrayList<String>();
-        for (Ingredient ingredient : ingredients){
+        for (Ingredient ingredient : ingredients) {
             result.add(ingredient.get_id());
         }
         return result;

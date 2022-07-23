@@ -9,7 +9,6 @@ public class UserCredentials {
         this.password = password;
     }
 
-
     public String getEmail() {
         return email;
     }

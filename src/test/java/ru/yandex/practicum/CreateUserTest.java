@@ -1,14 +1,17 @@
 package ru.yandex.practicum;
 
 import io.qameta.allure.Story;
+import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 import static ru.yandex.practicum.UserClient.*;
 import static ru.yandex.practicum.UserClient.loginUser;
+
 import io.qameta.allure.junit4.DisplayName;
 import io.qameta.allure.Description;
 import ru.yandex.practicum.model.*;
@@ -26,6 +29,7 @@ public class CreateUserTest {
 
     @Before
     public void beforeTests() {
+        RestAssured.baseURI = UserClient.BASE_URL;
         deleteUser = true;
         user = User.getRandomUser();
     }
@@ -33,7 +37,6 @@ public class CreateUserTest {
     @After
     public void afterTests() {
         if (deleteUser) {
-
             deleteUser(userToken);
         }
     }
@@ -110,7 +113,6 @@ public class CreateUserTest {
         userToken = responseUser.as(UserToken.class);
         assertTrue(createUserResponse.success);
         logoutUser(userToken);
-
         userCredentials = new UserCredentials(user.getEmail(), user.getPassword());
         responseUser = loginUser(userCredentials);
         createUserResponse = responseUser.as(CreateUserResponse.class);
@@ -128,14 +130,10 @@ public class CreateUserTest {
         userToken = responseUser.as(UserToken.class);
         assertTrue(createUserResponse.success);
         logoutUser(userToken);
-
         userCredentials = new UserCredentials(user.getEmail() + "abc", user.getPassword());
         responseUser = loginUser(userCredentials);
         createUserResponse = responseUser.as(CreateUserResponse.class);
         assertFalse(createUserResponse.success);
-
-        userCredentials = new UserCredentials(user.getEmail(), user.getPassword());
-        userToken = loginUser(userCredentials).as(UserToken.class);
     }
 
     @Test
@@ -148,14 +146,10 @@ public class CreateUserTest {
         userToken = responseUser.as(UserToken.class);
         assertTrue(createUserResponse.success);
         logoutUser(userToken);
-
         userCredentials = new UserCredentials(user.getEmail(), user.getPassword() + "abc");
         responseUser = loginUser(userCredentials);
         createUserResponse = responseUser.as(CreateUserResponse.class);
         assertFalse(createUserResponse.success);
-
-        userCredentials = new UserCredentials(user.getEmail(), user.getPassword());
-        userToken = loginUser(userCredentials).as(UserToken.class);
     }
 
     @Test
@@ -164,11 +158,9 @@ public class CreateUserTest {
             " - имя можно изменить")
     public void userChangeName() {
         responseUser = registerUser(user);
-
         CreateUserResponse createUserResponse = responseUser.as(CreateUserResponse.class);
         userToken = responseUser.as(UserToken.class);
         assertTrue(createUserResponse.success);
-
         user.setName(RandomStringUtils.randomAlphabetic(10));
         userProfile = new UserProfile(user.getEmail(), user.getName());
         createUserResponse = changeUserAuthorized(userToken, userProfile).as(CreateUserResponse.class);
@@ -181,11 +173,9 @@ public class CreateUserTest {
             " - почту можно изменить")
     public void userChangeEmail() {
         responseUser = registerUser(user);
-
         CreateUserResponse createUserResponse = responseUser.as(CreateUserResponse.class);
         userToken = responseUser.as(UserToken.class);
         assertTrue(createUserResponse.success);
-
         user.setEmail(RandomStringUtils.randomAlphabetic(10) + "@yandex.ru");
         userProfile = new UserProfile(user.getEmail(), user.getName());
         createUserResponse = changeUserAuthorized(userToken, userProfile).as(CreateUserResponse.class);
@@ -198,15 +188,12 @@ public class CreateUserTest {
             " - почту нельзя изменить")
     public void LogoutUserChangeEmail() {
         responseUser = registerUser(user);
-
         CreateUserResponse createUserResponse = responseUser.as(CreateUserResponse.class);
         userToken = responseUser.as(UserToken.class);
         assertTrue(createUserResponse.success);
-
         userProfile = new UserProfile(RandomStringUtils.randomAlphabetic(10) + "@yandex.ru", user.getName());
         responseUser = changeUserUnauthorized(userProfile);
         createUserResponse = responseUser.as(CreateUserResponse.class);
-
         assertFalse(createUserResponse.success);
     }
 
@@ -216,15 +203,12 @@ public class CreateUserTest {
             " - имя нельзя изменить")
     public void LogoutUserChangeName() {
         responseUser = registerUser(user);
-
         CreateUserResponse createUserResponse = responseUser.as(CreateUserResponse.class);
         userToken = responseUser.as(UserToken.class);
         assertTrue(createUserResponse.success);
-
         userProfile = new UserProfile(user.getEmail(), RandomStringUtils.randomAlphabetic(10));
         responseUser = changeUserUnauthorized(userProfile);
         createUserResponse = responseUser.as(CreateUserResponse.class);
-
         assertFalse(createUserResponse.success);
     }
 }

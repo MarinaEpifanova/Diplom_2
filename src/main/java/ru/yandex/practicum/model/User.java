@@ -7,7 +7,6 @@ public class User {
     private String password;
     private String name;
 
-
     public User(String email, String password, String name) {
         this.email = email;
         this.password = password;
@@ -15,13 +14,12 @@ public class User {
     }
 
     public static User getRandomUser() {
-        String email = RandomStringUtils.randomAlphabetic(10)+"@yandex.ru";
+        String email = RandomStringUtils.randomAlphabetic(10) + "@yandex.ru";
         String password = RandomStringUtils.randomAlphabetic(10);
         String name = RandomStringUtils.randomAlphabetic(10);
         return new User(email, password, name);
 
     }
-
 
     public String getEmail() {
         return email;
@@ -56,24 +54,3 @@ public class User {
                 '}';
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
